@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirst.Model", "CodeFirst.Model\CodeFirst.Model.csproj", "{7241CF54-955E-4466-9FC5-5CAC110C4A89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirst.DataLayer", "CodeFirst.DataLayer\CodeFirst.DataLayer.csproj", "{10E9D2B7-8BD4-4ACB-B2CD-07896DAB431C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TvProgram.Api", "TvProgram.Api\TvProgram.Api.csproj", "{3857E0A9-946F-457C-9E04-B8AA85F6FA47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7241CF54-955E-4466-9FC5-5CAC110C4A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7241CF54-955E-4466-9FC5-5CAC110C4A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7241CF54-955E-4466-9FC5-5CAC110C4A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7241CF54-955E-4466-9FC5-5CAC110C4A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E9D2B7-8BD4-4ACB-B2CD-07896DAB431C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E9D2B7-8BD4-4ACB-B2CD-07896DAB431C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E9D2B7-8BD4-4ACB-B2CD-07896DAB431C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E9D2B7-8BD4-4ACB-B2CD-07896DAB431C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3857E0A9-946F-457C-9E04-B8AA85F6FA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3857E0A9-946F-457C-9E04-B8AA85F6FA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3857E0A9-946F-457C-9E04-B8AA85F6FA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3857E0A9-946F-457C-9E04-B8AA85F6FA47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
