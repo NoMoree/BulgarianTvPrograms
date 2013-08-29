@@ -13,7 +13,7 @@ namespace TvProgram.Api.Controllers
     {
         [HttpGet]
         [ActionName("GetPrograms")]
-        private IQueryable<TvProgramModel> GetAll()
+        public IQueryable<TvProgramModel> GetAll()
         {
             return this.PerformOperationAndHandleExceptions(() =>
             {
