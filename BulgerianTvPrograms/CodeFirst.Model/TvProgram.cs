@@ -9,7 +9,8 @@ namespace CodeFirst.Model
         public int Id { get; set; }
 
         public string Name { get; set; }
-        public int SiteId { get; set; }
+        public int ProgramId { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
         public virtual ICollection<Day> Days { get; set; }
 

@@ -34,7 +34,7 @@ namespace TvProgram.Api.Controllers
                 Console.WriteLine(program.Name);
                 foreach (var day in dates)
                 {
-                    dnesTvShow = GetShow(program.InternetId, day.GetDateSiteFromat());
+                    dnesTvShow = GetShow(program.ProgramId, day.GetDateSiteFromat());
                     showsForDay = GetListOfShows(dnesTvShow);
 
                     foreach (var show in showsForDay)
@@ -162,7 +162,7 @@ namespace TvProgram.Api.Controllers
             foreach (var program in stringOfAllPrograms)
             {
                 tempProg = program.Split(new string[] { "\">" }, StringSplitOptions.None);
-                programs.Add(new TvProgramModel(int.Parse(tempProg[0]), tempProg[1]));
+                //programs.Add(new TvProgramModel(int.Parse(tempProg[0]), tempProg[1]));
             }
 
             return programs;

@@ -7,17 +7,21 @@ namespace TvProgram.Api.Models
 {
     public class TvProgramModel
     {
-        private readonly string name;
-        private readonly int internetId;
+        //private readonly string name;
+        //private readonly int programId;
 
-        public TvProgramModel(int internetId, string name)
-        {
-            this.internetId = internetId;
-            this.name = name;
-        }
+        //public TvProgramModel(int programId, string name)
+        //{
+        //    this.ProgramId = programId;
+        //    this.Name = name;
+        //}
 
-        public string Name { get { return name; } }
-        public int InternetId { get { return internetId; } }
+        //public TvProgramModel()
+        //{
+        //}
+
+        public string Name { get; set; }
+        public int ProgramId { get; set; }
     }
 
 }

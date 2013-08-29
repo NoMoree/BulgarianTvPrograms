@@ -68,3 +68,7 @@ C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.csprojResolveAssemblyReference.cache
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.pdb
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.dll
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.dll
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.pdb
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.pdb

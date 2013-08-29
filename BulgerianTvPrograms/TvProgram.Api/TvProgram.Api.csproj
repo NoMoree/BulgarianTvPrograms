@@ -257,7 +257,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -291,6 +293,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeFirst.DataLayer\CodeFirst.DataLayer.csproj">
+      <Project>{10e9d2b7-8bd4-4acb-b2cd-07896dab431c}</Project>
+      <Name>CodeFirst.DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeFirst.Model\CodeFirst.Model.csproj">
+      <Project>{7241cf54-955e-4466-9fc5-5cac110c4a89}</Project>
+      <Name>CodeFirst.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
