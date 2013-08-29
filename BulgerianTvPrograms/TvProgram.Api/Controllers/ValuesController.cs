@@ -21,6 +21,20 @@ namespace TvProgram.Api.Controllers
             return "value";
         }
 
+        [HttpGet]
+        [ActionName("GetDateTimeNow")]
+        public string GetDateTimeNow()
+        {
+            return DateTime.Now.ToString();
+        }
+
+        [HttpGet]
+        [ActionName("GetDateTimeNow")]
+        public string GetDateTimeNowPlus(double number)
+        {
+            return DateTime.Now.AddDays(number).ToString();
+        }
+
         // POST api/values
         public void Post([FromBody]string value)
         {
