@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using CodeFirst.DataLayer;
 using TvProgram.Api.Models;
 
 namespace TvProgram.Api.Controllers
@@ -34,7 +36,7 @@ namespace TvProgram.Api.Controllers
                 Console.WriteLine(program.Name);
                 foreach (var day in dates)
                 {
-                    dnesTvShow = GetShow(program.ProgramId, day.GetDateSiteFromat());
+                    dnesTvShow = GetShowsHtml(program.ProgramId, day.GetDateSiteFromat());
                     showsForDay = GetListOfShows(dnesTvShow);
 
                     foreach (var show in showsForDay)
@@ -46,11 +48,40 @@ namespace TvProgram.Api.Controllers
             }
         }
 
-        protected string GetMain()
+        protected string GetMainHtml()
         {
             return Get("http://www.dnes.bg/tv.php");
         }
 
+        
+
+        private static string Get(string url, IDictionary<string, string> headers = null)//, string mediaType = "application/json")
+        {
+            HttpClient client = new HttpClient();
+            // "http://www.dnes.bg/tv.php";
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(url);
+            //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+            request.Method = HttpMethod.Get;
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+            }
+
+            var response = client.SendAsync(request).Result;
+            var contentString = response.Content.ReadAsStringAsync().Result;
+
+            return contentString;
+        }
+        protected static string GetShowsHtml(int programId, string dayName)
+        {
+            return Get("http://www.dnes.bg/tv.php?tv=" + programId + "&date=" + dayName);
+        }
+        
+        
         protected static List<ShowModel> GetListOfShows(string contentString)
         {
             var startIndexOfSelectTv = contentString.IndexOf("<div class=\"pad bProgram\">");
@@ -94,31 +125,7 @@ namespace TvProgram.Api.Controllers
             return shows;
         }
 
-
-
-        public static string Get(string url, IDictionary<string, string> headers = null)//, string mediaType = "application/json")
-        {
-            HttpClient client = new HttpClient();
-            // "http://www.dnes.bg/tv.php";
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(url);
-            //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-            request.Method = HttpMethod.Get;
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                {
-                    request.Headers.Add(header.Key, header.Value);
-                }
-            }
-
-            var response = client.SendAsync(request).Result;
-            var contentString = response.Content.ReadAsStringAsync().Result;
-
-            return contentString;
-        }
-
-        public static List<DateModel> GetListOfDates(string contentString)//, string mediaType = "application/json")
+        protected static List<DateModel> GetListOfDates(string contentString)//, string mediaType = "application/json")
         {
             var startIndexOfSelectTv = contentString.IndexOf("<select name=\"date\" style=\"font-size:11px\">");// +45;
             startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;// +45;
@@ -142,12 +149,7 @@ namespace TvProgram.Api.Controllers
             return dates;
         }
 
-        private static string GetShow(int programId, string dayName)
-        {
-            return Get("http://www.dnes.bg/tv.php?tv=" + programId + "&date=" + dayName);
-        }
-
-        public static List<TvProgramModel> GetListOfPrograms(string contentString)
+        protected static List<TvProgramModel> GetListOfPrograms(string contentString)
         {
             var startIndexOfSelectTv = contentString.IndexOf("Всички</option>") + 17;
             var endIndexOfSelectTVs = contentString.IndexOf("</select>", startIndexOfSelectTv) - 3;
@@ -167,92 +169,5 @@ namespace TvProgram.Api.Controllers
 
             return programs;
         }
-
-
-        //public static void Validate(string value, string name = "Name", bool canBeNull = false, string validate = null, int min = int.MinValue, int max = int.MaxValue, int exact = int.MinValue, bool isNumber = false)
-        //{
-        //    if (!canBeNull)
-        //    {
-        //        if (value == null)
-        //        {
-        //            throw new ArgumentNullException(name + " can not be null");
-        //        }
-        //    }
-
-        //    #region isNumberOrString => MinMaxExact
-        //    if (!isNumber)
-        //    {
-        //        if (exact != int.MinValue)
-        //        {
-        //            if (exact != value.Length)
-        //            {
-        //                throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be exact {1} characters long", name, exact));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (min != int.MinValue)
-        //            {
-        //                if (min > value.Length)
-        //                {
-        //                    throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be at least {1} characters long", name, min));
-        //                }
-        //            }
-        //            if (max != int.MaxValue)
-        //            {
-        //                if (max < value.Length)
-        //                {
-        //                    throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be less then {1} characters long", name, max));
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (exact != int.MinValue)
-        //        {
-        //            if (exact != int.Parse(value))
-        //            {
-        //                throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be exact number {1}", name, exact));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (min != int.MinValue)
-        //            {
-        //                if (min > int.Parse(value))
-        //                {
-        //                    throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be at bigger then {1}", name, min));
-        //                }
-        //            }
-        //            if (max != int.MaxValue)
-        //            {
-        //                if (max < int.Parse(value))
-        //                {
-        //                    throw new ArgumentOutOfRangeException(string.Format(
-        //                        "{0} must be at smaller then {1}", name, max));
-        //                }
-        //            }
-        //        }
-        //    }
-        //    #endregion
-
-        //    if (validate != null)
-        //    {
-        //        if (value.Any(ch => !validate.Contains(ch)))
-        //        {
-        //            throw new ArgumentOutOfRangeException(
-        //               string.Format("{0} must contain only:  {1}", name, validate));
-        //        }
-        //    }
-
-
-        //}
-
-    }
+}
 }
