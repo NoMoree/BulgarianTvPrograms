@@ -22,14 +22,14 @@ namespace TvProgram.Api.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetDateTimeNow")]
+        [ActionName("DateTimeNow")]
         public string GetDateTimeNow()
         {
             return DateTime.Now.ToString();
         }
 
         [HttpGet]
-        [ActionName("GetDateTimeNow")]
+        [ActionName("DateTimeNowPlus")]
         public string GetDateTimeNowPlus(double number)
         {
             return DateTime.Now.AddDays(number).ToString();

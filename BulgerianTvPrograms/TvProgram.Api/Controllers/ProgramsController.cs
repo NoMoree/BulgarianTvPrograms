@@ -12,6 +12,7 @@ namespace TvProgram.Api.Controllers
     public class ProgramsController : BaseApiController
     {
         [HttpGet]
+        [ActionName("GetPrograms")]
         private IQueryable<TvProgramModel> GetAll()
         {
             return this.PerformOperationAndHandleExceptions(() =>
@@ -25,9 +26,8 @@ namespace TvProgram.Api.Controllers
                      {
                          Name = tv.Name,
                          ProgramId = tv.ProgramId
-                     }
-                     );
-                return model;
+                     });
+                return model.OrderBy(t => t.Name);
             });
 
             //return responseMsg;
