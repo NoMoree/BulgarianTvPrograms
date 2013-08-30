@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace TvProgram.Api.Models
 {
+    [DataContract]
     public class ShowModel
     {
-        private readonly string name;
-        private readonly string time;
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
 
-        public ShowModel(string name, string time)
-        {
-            this.name = name;
-            this.time = time;
-        }
+        [DataMember(Name = "startAt")]
+        public string StartAt { get; set; }
 
-        public string Name { get { return name; } }
-        public string Time { get { return time; } }
+        [DataMember(Name = "tvProgramId")]
+        public int TvProgramId { get; set; }
+
+        [DataMember(Name = "dateId")]
+        public int DateId { get; set; }
     }
 }

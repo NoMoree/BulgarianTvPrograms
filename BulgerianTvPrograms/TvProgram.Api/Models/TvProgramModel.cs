@@ -16,6 +16,9 @@ namespace TvProgram.Api.Models
         public string Name { get; set; }
         [DataMember(Name = "programId")]
         public int ProgramId { get; set; }
+
+        [DataMember(Name = "days")]
+        public IEnumerable<DayModel> Days { get; set; }
     }
 
 }
