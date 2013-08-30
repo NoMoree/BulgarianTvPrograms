@@ -101,6 +101,11 @@ namespace TvProgram.Api.Controllers
             //            StringSplitOptions.RemoveEmptyEntries
             //        );
 
+            if (endIndexOfSelectTVs <0)
+            {
+                return null;
+            }
+
             var stringOfAllPrograms = contentString.Substring(
                 startIndexOfSelectTv,
                 endIndexOfSelectTVs - startIndexOfSelectTv)
@@ -131,6 +136,30 @@ namespace TvProgram.Api.Controllers
 
         protected static List<DayModel> GetListOfDays(string contentString)//, string mediaType = "application/json")
         {
+            #region old
+            //var startIndexOfSelectTv = contentString.IndexOf("<select name=\"date\" style=\"font-size:11px\">");// +45;
+            //startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;// +45;
+
+
+            //var endIndexOfSelectTVs = contentString.IndexOf("</select>", startIndexOfSelectTv) - 3;
+
+            //var stringOfAllPrograms = contentString.Substring(startIndexOfSelectTv,
+            //                                                    endIndexOfSelectTVs - startIndexOfSelectTv)/*.Replace("\\n", "")*/.Replace(" selected", "").Replace("</option>", "").Split(new string[] { "<option value=\"" }, StringSplitOptions.RemoveEmptyEntries);
+
+
+            //var dates = new List<ProgramScheduleModel>();
+
+            //string[] tempProg = new string[2];
+            //foreach (var date in stringOfAllPrograms)
+            //{
+            //    tempProg = date.Split(new string[] { "\">" }, StringSplitOptions.None);
+            //    dates.Add(new ProgramScheduleModel()
+            //        {
+            //            Name = tempProg[1],
+            //            GetDate = DateTime.Parse(tempProg[0])
+            //        });
+            //} 
+            #endregion
             var startIndexOfSelectTv = contentString.IndexOf("<select name=\"date\" style=\"font-size:11px\">");// +45;
             startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;// +45;
 
@@ -142,16 +171,18 @@ namespace TvProgram.Api.Controllers
 
 
             var dates = new List<DayModel>();
+            
+
 
             string[] tempProg = new string[2];
             foreach (var date in stringOfAllPrograms)
             {
                 tempProg = date.Split(new string[] { "\">" }, StringSplitOptions.None);
                 dates.Add(new DayModel()
-                    {
-                        Name = tempProg[1],
-                        GetDate = DateTime.Parse(tempProg[0])
-                    });
+                {
+                    Name = tempProg[1],
+                    Date = DateTime.Parse(tempProg[0])
+                });
             }
 
             return dates;

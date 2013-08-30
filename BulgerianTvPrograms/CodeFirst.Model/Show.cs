@@ -11,7 +11,7 @@ namespace CodeFirst.Model
         public string Name { get; set; }
         public string StarAt { get; set; }
 
-        public virtual Day Day { get; set; }
+        public virtual ProgramSchedule Day { get; set; }
 
         public virtual TvProgram TvProgram { get; set; }
     }

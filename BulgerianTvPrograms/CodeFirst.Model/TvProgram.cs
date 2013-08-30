@@ -10,13 +10,13 @@ namespace CodeFirst.Model
 
         public string Name { get; set; }
         public int ProgramId { get; set; }
-        public DateTime LastUpdatedDate { get; set; }
+        public virtual Day LastUpdatedDate { get; set; }
 
-        public virtual ICollection<Day> Days { get; set; }
+        public virtual ICollection<ProgramSchedule> Days { get; set; }
 
         public TvProgram()
         {
-            this.Days = new HashSet<Day>();
+            this.Days = new HashSet<ProgramSchedule>();
         }
     }
 }

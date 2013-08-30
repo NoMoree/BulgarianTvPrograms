@@ -16,7 +16,11 @@ namespace CodeFirst.DataLayer
         //}
 
         public DbSet<TvProgram> TvPrograms { get; set; }
-        public DbSet<Day> Days { get; set; }
+        public DbSet<ProgramSchedule> ProgramSchedules { get; set; }
         public DbSet<Show> Shows { get; set; }
+
+        public DbSet<Day> Day { get; set; }
+        public DbSet<DbMetadata> DbMetadata { get; set; }
+
     }
 }

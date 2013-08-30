@@ -14,11 +14,11 @@ namespace TvProgram.Api.Models
 
         [DataMember(Name = "name")]
         public string Name { get; set; }
+
         [DataMember(Name = "programId")]
         public int ProgramId { get; set; }
 
         [DataMember(Name = "days")]
-        public IEnumerable<DayModel> Days { get; set; }
+        public IEnumerable<ProgramScheduleModel> Days { get; set; }
     }
-
 }

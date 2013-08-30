@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace CodeFirst.Model
 {
-    public class Day
+    public class DbMetadata
     {
         [Key]
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
-        public string Name { get; set; }
+        public DateTime LastUpdate { get; set; }
+
+        public DateTime OnProgramIdChange { get; set; }
+
     }
 }

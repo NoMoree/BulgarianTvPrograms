@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Day.cs" />
+    <Compile Include="DbMetadata.cs" />
+    <Compile Include="ProgramSchedule.cs" />
     <Compile Include="Show.cs" />
     <Compile Include="TvProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
