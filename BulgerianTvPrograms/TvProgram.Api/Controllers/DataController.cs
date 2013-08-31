@@ -6,57 +6,23 @@ using System.Net.Http;
 using System.Web.Http;
 using CodeFirst.DataLayer;
 using TvProgram.Api.Models;
+using TvProgram.Api.Models.InitProgramModel;
+using TvProgram.Api.Models.UpdateProgramModel;
 
 namespace TvProgram.Api.Controllers
 {
     public class DataController : BaseApiController
     {
-        [HttpGet]
-        [ActionName("AllProgramSchedule")]
-        public IQueryable<TvProgramModel> GetAllProgramSchedule()
-        {
-            var responseMsg = PerformOperationAndHandleExceptions(() =>
-            {
-                InitOrUpdateToday();
-
-                var context = new ProgramTvContext();
-                var tvPrograms = context.TvPrograms;
-
-                var model =
-                    (from tv in tvPrograms
-                     select new TvProgramModel()//tv.ProgramId, tv.Name)
-                     {
-                         Id = tv.Id,                    //can be remove for optimation
-                         Name = tv.Name,
-                         ProgramId = tv.ProgramId,      //can be remove for optimation
-                         Days = (from schedule in tv.Days
-                                 select new ProgramScheduleModel()
-                                {
-                                    DateId = schedule.Day.Id,
-                                    Shows = (from show in schedule.Shows
-                                             select new ShowModel()
-                                             {
-                                                 Name = show.Name,
-                                                 StartAt = show.StarAt,
-                                                 TvProgramId = tv.Id,
-                                                 DateId = schedule.Day.Id
-                                             })
-                                })
-                     });
-                return model;//.OrderBy(t => t.Name);
-            });
-
-            return responseMsg;
-        }
-
-        [HttpGet]
-        [ActionName("UpdateProgramSchedule")]
-        public IQueryable<UpdateScheduleModel> UpdateProgramSchedule(IList<UpdateScheduleHelper> helperModel)
+        // not tested       after     add to Init region
+        [HttpPost]
+        public List<UpdateScheduleModel> PostProgramSchedule(IList<UpdateScheduleHelper> helperModel)
         {
             var responseMsg = PerformOperationAndHandleExceptions(() =>
             {
                 var context = new ProgramTvContext();
                 var tvPrograms = context.TvPrograms;
+
+                var outPutModel = new List<UpdateScheduleModel>();
 
                 #region hide not used
                 //var model =
@@ -99,33 +65,51 @@ namespace TvProgram.Api.Controllers
                 //var models2 = this.GetAll(sessionKey)
                 //.Where(p => p.Title.Contains(keyword) 
                 #endregion
-
-                var model =
+                
+                foreach (var program in helperModel)
+                {
+                    if (program.Id >20 || program.Id <1)
+                    {
+                        throw new ArgumentException("The Id is incorect");
+                    }
+                    var tempModels =
                     (from tv in tvPrograms
+                     where tv.Id == program.Id
                      from schedule in tv.Days
-                     where schedule.Day.Id > helperModel[tv.ProgramId].LastUpdatedDate
+                     where schedule.Day.Id > program.LastUpdatedDate
                      select new UpdateScheduleModel()
                      {
                          ProgramId = tv.Id,
                          DateId = schedule.Day.Id,
                          Shows = (from show in schedule.Shows
-                                  select new ShowModel()
-                                    {
-                                        Name = show.Name,
-                                        StartAt = show.StarAt,
-                                        TvProgramId = tv.Id,        //can be remove for optimation
-                                        DateId = schedule.Day.Id    //can be remove for optimation
-                                    })
-                     });
+                                  select new UpdateShowModel()
+                                  {
+                                      Name = show.Name,
+                                      StartAt = show.StarAt
+                                      //,
+                                      //TvProgramId = tv.Id,        //can be remove for optimation
+                                      //DateId = schedule.Day.Id    //can be remove for optimation
+                                  })
+                     }).ToList();
 
-                return model;//.OrderBy(t => t.Name);
+                    foreach (var model in tempModels)
+                    {
+                        outPutModel.Add(model);
+                    }
+                }
+                
+
+                return outPutModel;//.OrderBy(t => t.Name);
             });
 
             return responseMsg;
         }
 
+
+#region Init :       DAYS   PROGRAMS
+		
         [HttpGet]
-        public IQueryable<InitTvProgramModel> InitUserPrograms()
+        public IQueryable<InitTvProgramModel> InitPrograms()
         {
             var responseMsg = PerformOperationAndHandleExceptions(() =>
             {
@@ -134,12 +118,11 @@ namespace TvProgram.Api.Controllers
                 var tvPrograms = context.TvPrograms;
 
                 var today = DateTime.Now;
-
                 var yesterday = DateTime.Now.AddDays(-1);
 
                 var model =
                     (from tv in tvPrograms
-                     select new InitTvProgramModel()//tv.ProgramId, tv.Name)
+                     select new InitTvProgramModel()
                      {
                          Id = tv.Id,
                          Name = tv.Name,
@@ -147,22 +130,17 @@ namespace TvProgram.Api.Controllers
                          Schedule = (from day in tv.Days
                                      where day.Day.Date < today
                                      where day.Day.Date > yesterday
-                                     select new ProgramScheduleModel()
+                                     select new InitProgramScheduleModel()
                                      {
                                          DateId = day.Day.Id,
                                          Shows = (from show in day.Shows
-                                                  //where day.Day.Date.Month == DateTime.Now.Month
-                                                  //where day.Day.Date.Year == DateTime.Now.Year
-                                                  //where day.Day.Date.Day == DateTime.Now.Day
-                                                  
-                                                  select new ShowModel()
+                                                  orderby show.Id
+                                                  select new InitShowModel()
                                                   {
-                                                      DateId = day.Day.Id,
                                                       Name = show.Name,
-                                                      StartAt = show.StarAt,
-                                                      TvProgramId = tv.Id
+                                                      StartAt = show.StarAt
                                                   })
-                                     })
+                                     }                                     )
                      });
 
                 return model;//.OrderBy(t => t.Name);
@@ -175,7 +153,7 @@ namespace TvProgram.Api.Controllers
         }
 
         [HttpGet]
-        public IQueryable<DayModel> InitUserDays()
+        public IQueryable<DayModel> InitDays()
         {
             var responseMsg = PerformOperationAndHandleExceptions(() =>
             {
@@ -203,6 +181,94 @@ namespace TvProgram.Api.Controllers
 
 
             return responseMsg;
+        } 
+	#endregion
+
+        #region GetAllProgramSchedule  to big operation for initialise
+        [HttpGet]
+        [ActionName("AllProgramSchedule")]
+        public IQueryable<TvProgramModel> GetAllProgramSchedule()
+        {
+            var responseMsg = PerformOperationAndHandleExceptions(() =>
+            {
+                InitOrUpdateToday();
+
+                var context = new ProgramTvContext();
+                var tvPrograms = context.TvPrograms;
+
+                var model =
+                    (from tv in tvPrograms
+                     select new TvProgramModel()//tv.ProgramId, tv.Name)
+                     {
+                         Id = tv.Id,                    //can be remove for optimation
+                         Name = tv.Name,
+                         ProgramId = tv.ProgramId,      //can be remove for optimation
+                         Days = (from schedule in tv.Days
+                                 select new ProgramScheduleModel()
+                                 {
+                                     DateId = schedule.Day.Id,
+                                     Shows = (from show in schedule.Shows
+                                              select new ShowModel()
+                                              {
+                                                  Name = show.Name,
+                                                  StartAt = show.StarAt,
+                                                  TvProgramId = tv.Id,
+                                                  DateId = schedule.Day.Id
+                                              })
+                                 })
+                     });
+                return model;//.OrderBy(t => t.Name);
+            });
+
+            return responseMsg;
         }
+
+        #endregion
+        #region allready added
+        //[HttpGet]
+        //public IQueryable<InitTvProgramModel> UpdatAllProgramsss()
+        //{
+        //    var responseMsg = PerformOperationAndHandleExceptions(() =>
+        //    {
+        //        var context = new ProgramTvContext();
+
+        //        var tvPrograms = context.TvPrograms;
+
+        //        var today = DateTime.Now;
+        //        var yesterday = DateTime.Now.AddDays(-1);
+
+        //        var model =
+        //            (from tv in tvPrograms
+        //             select new InitTvProgramModel()
+        //             {
+        //                 Id = tv.Id,
+        //                 Name = tv.Name,
+        //                 LastUpdate = DateTime.Now,
+        //                 Schedule = (from day in tv.Days
+        //                             where day.Day.Date < today
+        //                             where day.Day.Date > yesterday
+        //                             select new InitProgramScheduleModel()
+        //                             {
+        //                                 DateId = day.Day.Id,
+        //                                 Shows = (from show in day.Shows
+        //                                          orderby show.Id
+        //                                          select new InitShowModel()
+        //                                          {
+        //                                              Name = show.Name,
+        //                                              StartAt = show.StarAt
+        //                                          })
+        //                             })
+        //             });
+
+        //        return model;//.OrderBy(t => t.Name);
+
+        //    });
+
+
+
+        //    return responseMsg;
+        //} 
+        #endregion
+
     }
 }

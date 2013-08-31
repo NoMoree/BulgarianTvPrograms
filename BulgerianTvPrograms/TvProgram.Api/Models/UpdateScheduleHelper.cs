@@ -6,13 +6,13 @@ using System.Web;
 
 namespace TvProgram.Api.Models
 {
-    [DataContract]
+    //[DataContract]
     public class UpdateScheduleHelper
     {
-        [DataMember(Name="id")]
+        //[DataMember(Name="id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "lastUpdatedDate")]
+        //[DataMember(Name = "lastUpdatedDate")]
         public int LastUpdatedDate { get; set; }
     }
 }

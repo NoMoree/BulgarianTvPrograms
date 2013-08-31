@@ -1,5 +1,4 @@
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.Model\bin\Debug\CodeFirst.Model.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.Model\bin\Debug\CodeFirst.Model.pdb
-C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.Model\obj\Debug\CodeFirst.Model.csprojResolveAssemblyReference.cache
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.Model\obj\Debug\CodeFirst.Model.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.Model\obj\Debug\CodeFirst.Model.pdb

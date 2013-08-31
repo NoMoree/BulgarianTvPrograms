@@ -13,66 +13,62 @@ namespace TvProgram.Api.Controllers
 {
     public class DbUpdateController : BaseApiController
     {
-        //GetListOfShows
-        [HttpGet]
-        public HttpResponseMessage Drop()
-        {
-            var responseMsg = this.PerformOperationAndHandleExceptions(
-                () =>
-                {
-                    Database.SetInitializer(new DropCreateDatabaseAlways<ProgramTvContext>());
-                    //Database.SetInitializer<ProgramTvContext>(new System.Data.Entity.Dr .DropCreateDatabaseAlways<ProgramTvContext>());
-                    //InitOrUpdateDays();
-                    InitOrUpdateTvPrograms();
+        #region Not Ment to be public
+        //[HttpGet]
+        //public HttpResponseMessage Drop()
+        //{
+        //    var responseMsg = this.PerformOperationAndHandleExceptions(
+        //        () =>
+        //        {
+        //            Database.SetInitializer(new DropCreateDatabaseAlways<ProgramTvContext>());
+        //            //Database.SetInitializer<ProgramTvContext>(new System.Data.Entity.Dr .DropCreateDatabaseAlways<ProgramTvContext>());
+        //            //InitOrUpdateDays();
+        //            InitOrUpdateTvPrograms();
 
-                    var response =
-                            this.Request.CreateResponse(HttpStatusCode.OK);
+        //            var response =
+        //                    this.Request.CreateResponse(HttpStatusCode.OK);
 
-                    return response;
-                });
-            return responseMsg;
-        }
+        //            return response;
+        //        });
+        //    return responseMsg;
+        //}
+        //[HttpGet]
+        //public HttpResponseMessage InitOrUpdate()
+        //{
+        //    var responseMsg = this.PerformOperationAndHandleExceptions(
+        //        () =>
+        //        {
+        //            var response =
+        //                    this.Request.CreateResponse(HttpStatusCode.OK);
 
-        [HttpGet]
-        public HttpResponseMessage InitOrUpdate()
-        {
-            var responseMsg = this.PerformOperationAndHandleExceptions(
-                () =>
-                {
-                    var response =
-                            this.Request.CreateResponse(HttpStatusCode.OK);
-
-                    return response;
-                });
-            return responseMsg;
-        }
-        
-        
-        [HttpGet]
-        //[ActionName("UpdateTvProg")]
-        public HttpResponseMessage UpdateTvProg()
-        {
-            return InitOrUpdateTvPrograms();
-        }
-        [HttpGet]
-        //[ActionName("UpdateTvProg")]
-        public HttpResponseMessage UpdateDay()
-        {
-            return InitOrUpdateDays();
-        }
-        [HttpGet]
-        public HttpResponseMessage UpdateSchedule()
-        {
-            return UpdateSchedulePrivate();
-        }
-        [HttpGet]
-        public HttpResponseMessage InitSchedule()
-        {
-            return InitSchedulePrivate();
-        }
+        //            return response;
+        //        });
+        //    return responseMsg;
+        //}
+        //[HttpGet]
+        //public HttpResponseMessage UpdateTvProg()
+        //{
+        //    return InitOrUpdateTvPrograms();
+        //}
+        //[HttpGet]
+        //public HttpResponseMessage UpdateDay()
+        //{
+        //    return InitOrUpdateDays();
+        //}
+        //[HttpGet]
+        //public HttpResponseMessage UpdateSchedule()
+        //{
+        //    return UpdateSchedulePrivate();
+        //}
+        //[HttpGet]
+        //public HttpResponseMessage InitSchedule()
+        //{
+        //    return InitSchedulePrivate();
+        //} 
+        #endregion
 
 
-        //Ok
+        //Ok                dont remember it is this ...
 
 
         // [HttpPost]
@@ -170,9 +166,5 @@ namespace TvProgram.Api.Controllers
         //        });
         //    return responseMsg;
         //}
-
-
-
-       
     }
 }

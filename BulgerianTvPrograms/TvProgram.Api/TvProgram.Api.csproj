@@ -172,12 +172,15 @@
     <Compile Include="Models\CheckHelperModel.cs" />
     <Compile Include="Models\DataHelperModel.cs" />
     <Compile Include="Models\DayModel.cs" />
-    <Compile Include="Models\InitTvProgramModel.cs" />
+    <Compile Include="Models\InitProgramModel\InitProgramScheduleModel.cs" />
+    <Compile Include="Models\InitProgramModel\InitShowModel.cs" />
+    <Compile Include="Models\InitProgramModel\InitTvProgramModel.cs" />
     <Compile Include="Models\ProgramScheduleModel.cs" />
     <Compile Include="Models\ShowModel.cs" />
     <Compile Include="Models\TvProgramModel.cs" />
+    <Compile Include="Models\UpdateProgramModel\UpdateScheduleModel.cs" />
+    <Compile Include="Models\UpdateProgramModel\UpdateShowModel.cs" />
     <Compile Include="Models\UpdateScheduleHelper.cs" />
-    <Compile Include="Models\UpdateScheduleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
