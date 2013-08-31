@@ -10,10 +10,21 @@ namespace TvProgram.Api
         public static void Register(HttpConfiguration config)
         {
             #region Data
+            #region Data/InitUserDays
+            config.Routes.MapHttpRoute(
+                       name: "InitUserDays",
+                       routeTemplate: "api/Data/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "InitUserDays"
+                       }
+                   ); 
+            #endregion
             #region Data/InitUserPrograms
             config.Routes.MapHttpRoute(
                        name: "InitUserPrograms",
-                       routeTemplate: "api/{controller}/{action}",
+                       routeTemplate: "api/Data/{action}",
                        defaults: new
                        {
                            controller = "Data",
@@ -24,7 +35,7 @@ namespace TvProgram.Api
             #region Data/AllProgramSchedule
             config.Routes.MapHttpRoute(
                        name: "AllProgramSchedule",
-                       routeTemplate: "api/{controller}/{action}",
+                       routeTemplate: "api/Data/{action}",
                        defaults: new
                        {
                            controller = "Data",

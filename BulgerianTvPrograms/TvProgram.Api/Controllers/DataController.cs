@@ -125,50 +125,84 @@ namespace TvProgram.Api.Controllers
         }
 
         [HttpGet]
-        [ActionName("InitUserPrograms")]
         public IQueryable<InitTvProgramModel> InitUserPrograms()
         {
-            return this.PerformOperationAndHandleExceptions(() =>
+            var responseMsg = PerformOperationAndHandleExceptions(() =>
             {
                 var context = new ProgramTvContext();
-                using (context)
-                {
-                    var tvPrograms = context.TvPrograms;
 
-                    var today = DateTime.Now.AddDays(1);
-                                                    
-                    var yesterday=DateTime.Now.AddDays(-1);
+                var tvPrograms = context.TvPrograms;
 
-                    var model =
-                        (from tv in tvPrograms
-                         select new InitTvProgramModel()//tv.ProgramId, tv.Name)
-                         {
-                             Id = tv.Id,
-                             Name = tv.Name,
-                             LastUpdate = DateTime.Now,
-                             Schedule = (from day in tv.Days
-                                         select new ProgramScheduleModel()
-                                         {
-                                             DateId = day.Day.Id,
-                                             Shows = (from show in day.Shows
-                                                      //where day.Day.Date.Month == DateTime.Now.Month
-                                                      //where day.Day.Date.Year == DateTime.Now.Year
-                                                      //where day.Day.Date.Day == DateTime.Now.Day
-                                                      //where day.Day.Date < today
-                                                      //where day.Day.Date> yesterday
-                                                      select new ShowModel()
-                                                      {
-                                                          DateId = day.Day.Id,
-                                                          Name = show.Name,
-                                                          StartAt = show.StarAt,
-                                                          TvProgramId = tv.Id
-                                                      })
-                                         })
-                         }).AsQueryable();
+                var today = DateTime.Now;
 
-                    return model;//.OrderBy(t => t.Name);
-                }
+                var yesterday = DateTime.Now.AddDays(-1);
+
+                var model =
+                    (from tv in tvPrograms
+                     select new InitTvProgramModel()//tv.ProgramId, tv.Name)
+                     {
+                         Id = tv.Id,
+                         Name = tv.Name,
+                         LastUpdate = DateTime.Now,
+                         Schedule = (from day in tv.Days
+                                     where day.Day.Date < today
+                                     where day.Day.Date > yesterday
+                                     select new ProgramScheduleModel()
+                                     {
+                                         DateId = day.Day.Id,
+                                         Shows = (from show in day.Shows
+                                                  //where day.Day.Date.Month == DateTime.Now.Month
+                                                  //where day.Day.Date.Year == DateTime.Now.Year
+                                                  //where day.Day.Date.Day == DateTime.Now.Day
+                                                  
+                                                  select new ShowModel()
+                                                  {
+                                                      DateId = day.Day.Id,
+                                                      Name = show.Name,
+                                                      StartAt = show.StarAt,
+                                                      TvProgramId = tv.Id
+                                                  })
+                                     })
+                     });
+
+                return model;//.OrderBy(t => t.Name);
+
             });
+
+
+
+            return responseMsg;
+        }
+
+        [HttpGet]
+        public IQueryable<DayModel> InitUserDays()
+        {
+            var responseMsg = PerformOperationAndHandleExceptions(() =>
+            {
+                var context = new ProgramTvContext();
+
+                var days = context.Day;
+
+                var today = DateTime.Now;
+
+                var yesterday = DateTime.Now.AddDays(-1);
+
+                var model =
+                    (from day in days
+                     select new DayModel()//tv.ProgramId, tv.Name)
+                     {
+                         Id = day.Id,
+                         Name = day.Name,
+                         Date = day.Date
+                     });
+
+                return model;//.OrderBy(t => t.Name);
+
+            });
+
+
+
+            return responseMsg;
         }
     }
 }
