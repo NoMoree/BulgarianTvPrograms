@@ -17,6 +17,8 @@ namespace TvProgram.Api.Controllers
         {
             var responseMsg = PerformOperationAndHandleExceptions(() =>
             {
+                InitOrUpdateToday();
+
                 var context = new ProgramTvContext();
                 var tvPrograms = context.TvPrograms;
 

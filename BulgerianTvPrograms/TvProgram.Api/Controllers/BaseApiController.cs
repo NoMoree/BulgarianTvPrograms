@@ -26,27 +26,550 @@ namespace TvProgram.Api.Controllers
                 throw new HttpResponseException(errResponse);
             }
         }
-
-        private static void TotatlUpdate(List<TvProgramModel> programs, List<DayModel> dates)
+        protected void InitOrUpdateToday()
         {
-            string dnesTvShow;
-            var showsForDay = new List<ShowModel>();
-            foreach (var program in programs)
-            {
-                Console.WriteLine(program.Name);
-                foreach (var day in dates)
-                {
-                    dnesTvShow = GetShowsHtml(program.ProgramId, day.GetDateSiteFromat());
-                    showsForDay = GetListOfShows(dnesTvShow);
+            var context = new ProgramTvContext();
 
-                    foreach (var show in showsForDay)
+            using (context)
+            {
+                var dbMeta = context.DbMetadata.First();
+
+                if (dbMeta == null)
+                {
+                    InitOrUpdateDays();
+                    InitOrUpdateTvPrograms();
+                    InitSchedulePrivate();
+
+
+
+                    var newDbMeta = new CodeFirst.Model.DbMetadata()
                     {
-                        //dates
-                        //Console.WriteLine("        {0} -  {1}", show.Time, show.Name);
-                    }
+                        LastUpdate = DateTime.Now,
+                        OnProgramIdChange=DateTime.Now
+                    };
+
+                    context.DbMetadata.Add(newDbMeta);
+                    context.SaveChanges();
                 }
+
+                //#region If new Init DB data
+                //if (dbMeta.LastUpdate.Year != DateTime.Now.Year)
+                //{
+
+                //}
+                //#endregion
+
+                #region Else Update DB data If not it was not UPDATED TODAY
+                else if (dbMeta.LastUpdate.DayOfYear != DateTime.Now.DayOfYear)
+                {
+                    InitOrUpdateDays();
+                    InitOrUpdateTvPrograms();
+                    UpdateSchedulePrivate();
+
+                    dbMeta.LastUpdate = DateTime.Now;
+                    context.SaveChanges();
+                }
+                #endregion
             }
+            //return context;
         }
+
+        protected HttpResponseMessage InitOrUpdateTvPrograms()
+        {
+            var responseMsg = this.PerformOperationAndHandleExceptions(
+                () =>
+                {
+                    var context = new ProgramTvContext();
+                    using (context)
+                    {
+                        var tvPrograms = context.TvPrograms;
+
+                        string main = GetMainHtml();
+                        var allPrograms = GetListOfPrograms(main);
+                        List<TvProgramModel> programs = new List<TvProgramModel>();
+                        for (int i = 0; i < 20; i++)
+                        {
+                            programs.Add(allPrograms[i]);
+                        }
+
+                        var models =
+                            (from tv in tvPrograms
+                             select new TvProgramModel()//tv.ProgramId, tv.Name)
+                             {
+                                 Name = tv.Name,
+                                 ProgramId = tv.ProgramId
+                             });
+                        bool isAdded;
+                        foreach (var program in programs)
+                        {
+                            isAdded = false;
+                            foreach (var model in models)
+                            {
+                                if (program.Name == model.Name)
+                                {
+                                    if (program.ProgramId == model.ProgramId)
+                                    {
+                                        isAdded = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        //TODO UpdateProgramChange
+                                        //model.ProgramId = program.ProgramId;
+                                        //context.SaveChanges();
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!isAdded)
+                            {
+                                var newProgram = new CodeFirst.Model.TvProgram()
+                                {
+                                    Name = program.Name,
+                                    ProgramId = program.ProgramId
+                                    //LastUpdatedDate = DateTime.Now
+                                };
+                                tvPrograms.Add(newProgram);
+                                context.SaveChanges();
+
+                            }
+                        }
+
+
+                        var response =
+                            this.Request.CreateResponse(HttpStatusCode.OK);
+
+                        return response;
+                    }
+                });
+            return responseMsg;
+        }
+        protected HttpResponseMessage InitOrUpdateDays(string main = "")
+        {
+            var responseMsg = this.PerformOperationAndHandleExceptions(
+                () =>
+                {
+                    var context = new ProgramTvContext();
+                    using (context)
+                    {
+                        var dayContext = context.Day;
+
+                        if (main == "")
+                        {
+                            main = GetMainHtml();
+
+                        }
+                        var days = GetListOfDays(main);
+                        //List<TvProgramModel> programs = new List<TvProgramModel>();
+                        //for (int i = 0; i < 20; i++)
+                        //{
+                        //    programs.Add(allPrograms[i]);
+                        //}
+
+                        var models =
+                            (from day in dayContext
+                             select new DayModel()//tv.ProgramId, tv.Name)
+                             {
+                                 Name = day.Name,
+                                 Date = day.Date
+                             });
+                        bool isAdded;
+                        foreach (var day in days)
+                        {
+                            isAdded = false;
+                            foreach (var model in models)
+                            {
+                                if (day.Name == model.Name)
+                                {
+                                    isAdded = true;
+                                    break;
+                                }
+                            }
+                            if (!isAdded)
+                            {
+                                var newDay = new CodeFirst.Model.Day()
+                                {
+                                    Name = day.Name,
+                                    Date = day.Date
+                                };
+                                dayContext.Add(newDay);
+                                context.SaveChanges();
+                            }
+                        }
+
+
+                        var response =
+                            this.Request.CreateResponse(HttpStatusCode.OK);
+
+                        return response;
+                    }
+                });
+            return responseMsg;
+        }
+
+        protected HttpResponseMessage InitSchedulePrivate()
+        {
+            var responseMsg = this.PerformOperationAndHandleExceptions(
+                () =>
+                {
+                    var context = new ProgramTvContext();
+                    using (context)
+                    {
+                        //var dayContext = context.ProgramSchedules;
+                        var tvPrograms = context.TvPrograms;
+                        var days = context.Day;
+
+                        var allDays =
+                           (from day in days
+                            select new DayModel()
+                            {
+                                Id = day.Id,
+                                Name = day.Name,
+                                Date = day.Date
+                            }).ToList();
+
+
+                        int programsCount = context.TvPrograms.Count();
+                        var allDaysCount = allDays.Count();
+                        for (int i = 1; i < programsCount + 1; i++)
+                        {
+                            for (int thisDay = 1; thisDay < allDaysCount + 1; thisDay++)
+                            {
+
+                                var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == i);
+
+                                string schedulePage = GetShowsHtml(
+                                    thisProgram.ProgramId,
+                                    allDays[thisDay - 1].GetDateSiteFromat());
+
+                                var newShows = GetListOfShows(schedulePage);
+
+                                if (newShows == null || newShows.Count < 3)
+                                {
+                                    break;
+                                }
+
+                                var newSchedule = new CodeFirst.Model.ProgramSchedule()
+                                {
+                                    Day = days.FirstOrDefault(day => day.Id == thisDay)
+                                };
+                                thisProgram.Days.Add(newSchedule);
+                                context.SaveChanges();
+
+
+                                foreach (var show in newShows)
+                                {
+                                    var showForAdding = new CodeFirst.Model.Show()
+                                    {
+                                        Name = show.Name,
+                                        StarAt = show.StartAt,
+                                        TvProgram = thisProgram,
+                                        Day = newSchedule
+                                    };
+                                    newSchedule.Shows.Add(showForAdding);
+                                    context.SaveChanges();
+                                }
+                                thisProgram.LastUpdatedDate = newSchedule.Day;
+
+                            }
+                        }
+                        #region asd
+                        //foreach (var lastUpdate in programsLastUpdatedDateId)
+                        //{
+
+                        //}
+
+
+                        //var allInformationFromDB = (from tv in tvPrograms
+                        //                            select new CheckHelperModel()//tv.ProgramId, tv.Name)
+                        //                            {
+                        //                                Id = tv.Id,
+                        //                                ProgramId = tv.ProgramId,
+                        //                                Days = (from day in tv.Days
+                        //                                        where day.Date < DateTime.Now
+                        //                                        select new DataHelperModel()
+                        //                                        {
+                        //                                            GetDate = day.Date,
+                        //                                            Count = day.Shows.Count()
+                        //                                        })
+                        //                            });
+
+                        //foreach (CheckHelperModel program in allInformationFromDB)
+                        //{
+
+                        //}
+
+
+                        //.Where(day => day.Date >DateTime.Now)
+                        //day => day.Date < DateTime.Now)
+                        //select new DataHelperModel()
+                        //{
+                        //    GetDate = day.Date,
+                        //    Count = day.Shows.Count()
+                        //})
+
+                        //foreach (var item in collection)
+                        //{
+
+                        //}
+                        //var models =
+                        //    (from day in dayContext
+                        //     select new ProgramScheduleModel()//tv.ProgramId, tv.Name)
+                        //     {
+                        //         Name = day.Name,
+                        //         GetDate = day.Date
+                        //     });
+                        //bool isAdded;
+                        //foreach (var day in days)
+                        //{
+                        //    isAdded = false;
+                        //    foreach (var model in models)
+                        //    {
+                        //        if (day.Name == model.Name)
+                        //        {
+                        //            isAdded = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //    if (!isAdded)
+                        //    {
+                        //        var newDay = new CodeFirst.Model.ProgramSchedule()
+                        //        {
+                        //            Name = day.Name,
+                        //            Date = day.GetDate
+                        //        };
+                        //        dayContext.Add(newDay);
+                        //        context.SaveChanges();
+                        //    }
+                        //} 
+                        #endregion
+
+
+                        var response =
+                            this.Request.CreateResponse(HttpStatusCode.OK);
+
+                        return response;
+                    }
+                });
+            return responseMsg;
+        }
+        protected HttpResponseMessage UpdateSchedulePrivate()
+        {
+            var responseMsg = this.PerformOperationAndHandleExceptions(
+                () =>
+                {
+                    var context = new ProgramTvContext();
+                    using (context)
+                    {
+                        //var dayContext = context.ProgramSchedules;
+                        var tvPrograms = context.TvPrograms;
+                        var days = context.Day;
+
+
+                        #region all
+
+                        //List<TvProgramModel> programs = new List<TvProgramModel>();
+                        //for (int i = 0; i < 20; i++)
+                        //{
+                        //    programs.Add(allPrograms[i]);
+                        //}
+                        //var allInformationFromDB = (from tv in tvPrograms
+                        //            select new TvProgramModel()//tv.ProgramId, tv.Name)
+                        //            {
+                        //                Name = tv.Name,
+                        //                ProgramId = tv.ProgramId,
+                        //                ProgramSchedules = (from day in tv.ProgramSchedules
+                        //                        select new ProgramScheduleModel()
+                        //                        {
+                        //                            Name = day.Name,
+                        //                            GetDate = day.Date,
+                        //                            Shows = (from show in day.Shows
+                        //                                    select new ShowModel()
+                        //                                    {
+                        //                                        Name = show.Name,
+                        //                                        StartAt = show.StarAt
+                        //                                    })
+                        //                       })
+                        //            }); 
+
+
+                        //var programs = (from tv in tvPrograms
+                        //                select tv);
+                        //new TvProgramModel()
+                        //{
+
+                        //});
+                        #endregion
+                        var programsLastUpdatedDateId = (from tv in tvPrograms
+                                                         orderby tv.Id
+                                                         //where tv.LastUpdatedDate !=null
+                                                         select tv.LastUpdatedDate.Id
+                                                         ).ToList();
+
+
+                        //int n = 10;
+
+                        int lastDayId = days.Count();
+
+                        var nLastDaysId =
+                           (from day in days
+                            orderby day.Id
+                            //where day.Id > (days.Last().Id - n)
+                            where day.Id > (lastDayId - 3)
+                            select new DayModel()
+                            {
+                                Id = day.Id,
+                                Name = day.Name,
+                                Date = day.Date
+                            }
+                                            ).ToList();
+
+                        //select tv.LastUpdatedDate.Id).ToList();
+                        int programsCount = programsLastUpdatedDateId.Count;
+                        for (int i = 1; i < programsCount + 1; i++)
+                        {
+                            if (programsLastUpdatedDateId[i - 1] < lastDayId)
+                            {
+                                for (int thisDay = programsLastUpdatedDateId[i - 1]; thisDay < lastDayId; thisDay++)
+                                {
+                                    var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == i);
+
+                                    string schedulePage = GetShowsHtml(thisProgram.ProgramId,
+                                        nLastDaysId[lastDayId - thisDay].GetDateSiteFromat());
+
+                                    var newShows = GetListOfShows(schedulePage);
+
+                                    if (newShows == null)
+                                    {
+                                        break;
+                                    }
+
+                                    var newSchedule = new CodeFirst.Model.ProgramSchedule()
+                                    {
+                                        Day = days.FirstOrDefault(usr => usr.Id == thisDay)
+                                    };
+                                    thisProgram.Days.Add(newSchedule);
+                                    context.SaveChanges();
+
+
+                                    foreach (var show in newShows)
+                                    {
+                                        var showForAdding = new CodeFirst.Model.Show()
+                                        {
+                                            Name = show.Name,
+                                            StarAt = show.StartAt,
+                                            TvProgram = thisProgram,
+                                            Day = newSchedule
+                                        };
+                                        thisProgram.LastUpdatedDate = newSchedule.Day;
+                                        newSchedule.Shows.Add(showForAdding);
+                                        context.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+
+                        //foreach (var lastUpdate in programsLastUpdatedDateId)
+                        //{
+
+                        //}
+
+
+                        //var allInformationFromDB = (from tv in tvPrograms
+                        //                            select new CheckHelperModel()//tv.ProgramId, tv.Name)
+                        //                            {
+                        //                                Id = tv.Id,
+                        //                                ProgramId = tv.ProgramId,
+                        //                                Days = (from day in tv.Days
+                        //                                        where day.Date < DateTime.Now
+                        //                                        select new DataHelperModel()
+                        //                                        {
+                        //                                            GetDate = day.Date,
+                        //                                            Count = day.Shows.Count()
+                        //                                        })
+                        //                            });
+
+                        //foreach (CheckHelperModel program in allInformationFromDB)
+                        //{
+
+                        //}
+
+                        #region asd
+                        //.Where(day => day.Date >DateTime.Now)
+                        //day => day.Date < DateTime.Now)
+                        //select new DataHelperModel()
+                        //{
+                        //    GetDate = day.Date,
+                        //    Count = day.Shows.Count()
+                        //})
+
+                        //foreach (var item in collection)
+                        //{
+
+                        //}
+                        //var models =
+                        //    (from day in dayContext
+                        //     select new ProgramScheduleModel()//tv.ProgramId, tv.Name)
+                        //     {
+                        //         Name = day.Name,
+                        //         GetDate = day.Date
+                        //     });
+                        //bool isAdded;
+                        //foreach (var day in days)
+                        //{
+                        //    isAdded = false;
+                        //    foreach (var model in models)
+                        //    {
+                        //        if (day.Name == model.Name)
+                        //        {
+                        //            isAdded = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //    if (!isAdded)
+                        //    {
+                        //        var newDay = new CodeFirst.Model.ProgramSchedule()
+                        //        {
+                        //            Name = day.Name,
+                        //            Date = day.GetDate
+                        //        };
+                        //        dayContext.Add(newDay);
+                        //        context.SaveChanges();
+                        //    }
+                        //} 
+                        #endregion
+
+
+                        var response =
+                            this.Request.CreateResponse(HttpStatusCode.OK);
+
+                        return response;
+                    }
+                });
+            return responseMsg;
+        }
+
+
+        //private static void TotatlUpdate(List<TvProgramModel> programs, List<DayModel> dates)
+        //{
+        //    string dnesTvShow;
+        //    var showsForDay = new List<ShowModel>();
+        //    foreach (var program in programs)
+        //    {
+        //        Console.WriteLine(program.Name);
+        //        foreach (var day in dates)
+        //        {
+        //            dnesTvShow = GetShowsHtml(program.ProgramId, day.GetDateSiteFromat());
+        //            showsForDay = GetListOfShows(dnesTvShow);
+
+        //            foreach (var show in showsForDay)
+        //            {
+        //                //dates
+        //                //Console.WriteLine("        {0} -  {1}", show.Time, show.Name);
+        //            }
+        //        }
+        //    }
+        //}
 
         protected string GetMainHtml()
         {

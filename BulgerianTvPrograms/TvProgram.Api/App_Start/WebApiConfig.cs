@@ -35,6 +35,18 @@ namespace TvProgram.Api
             */
             #region InitOrUpdate    //public for naw
             config.Routes.MapHttpRoute(
+                                name: "Drop",      
+                                routeTemplate: "api/DbUpdate/{action}",
+                                defaults: new
+                                {
+                                    controller = "DbUpdate",
+                                    action = "Drop"
+                                }
+                            ); 
+            #endregion
+
+            #region InitOrUpdate    //public for naw
+            config.Routes.MapHttpRoute(
                                 name: "InitOrUpdate",      
                                 routeTemplate: "api/DbUpdate/{action}",
                                 defaults: new
