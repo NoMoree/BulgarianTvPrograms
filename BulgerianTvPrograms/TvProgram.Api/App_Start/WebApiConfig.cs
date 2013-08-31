@@ -10,15 +10,40 @@ namespace TvProgram.Api
         public static void Register(HttpConfiguration config)
         {
             #region Data
+            #region Data/InitUserPrograms
             config.Routes.MapHttpRoute(
-                   name: "Data.GetAllPrograms(20)",
-                   routeTemplate: "{controller}/{action}",
-                   defaults: new
-                   {
-                       controller = "Data",
-                       action = "AllProgramSchedule"
-                   }
-               ); 
+                       name: "InitUserPrograms",
+                       routeTemplate: "api/{controller}/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "InitUserPrograms"
+                       }
+                   ); 
+            #endregion
+            #region Data/AllProgramSchedule
+            config.Routes.MapHttpRoute(
+                       name: "AllProgramSchedule",
+                       routeTemplate: "api/{controller}/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "AllProgramSchedule"
+                       }
+                   ); 
+            #endregion
+
+            #region Data/UpdateProgramSchedule
+            config.Routes.MapHttpRoute(
+                       name: "UpdateProgramSchedule",
+                       routeTemplate: "api/{controller}/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "UpdateProgramSchedule"
+                       }
+                   ); 
+            #endregion 
             #endregion
 
             #region DbUpdate
@@ -33,7 +58,7 @@ namespace TvProgram.Api
             http://localhost:52807/api/DbUpdate/
              
             */
-            #region InitOrUpdate    //public for naw
+            #region DbUpdate/DbUpdate    //public for naw
             config.Routes.MapHttpRoute(
                                 name: "Drop",      
                                 routeTemplate: "api/DbUpdate/{action}",
@@ -45,7 +70,7 @@ namespace TvProgram.Api
                             ); 
             #endregion
 
-            #region InitOrUpdate    //public for naw
+            #region DbUpdate/InitOrUpdate    //public for naw
             config.Routes.MapHttpRoute(
                                 name: "InitOrUpdate",      
                                 routeTemplate: "api/DbUpdate/{action}",
@@ -57,7 +82,7 @@ namespace TvProgram.Api
                             ); 
             #endregion
 
-            #region UpdateDay   //public for naw
+            #region DbUpdate/UpdateDay   //public for naw
             config.Routes.MapHttpRoute(
                                 name: "UpdateDays",
                                 routeTemplate: "api/DbUpdate/{action}",
@@ -68,7 +93,7 @@ namespace TvProgram.Api
                                 }
                             ); 
             #endregion
-            #region UpdateTvProg    //public for naw
+            #region DbUpdate/UpdateTvProg    //public for naw
             config.Routes.MapHttpRoute(
                         name: "UpdatePrograms(20)",
                         routeTemplate: "api/DbUpdate/{action}",
@@ -79,7 +104,7 @@ namespace TvProgram.Api
                         }
                     ); 
             #endregion
-            #region InitSchedule    //public for naw
+            #region DbUpdate/InitSchedule    //public for naw
             config.Routes.MapHttpRoute(
                                 name: "InitSchedule",
                                 routeTemplate: "api/DbUpdate/{action}",
@@ -90,7 +115,7 @@ namespace TvProgram.Api
                                 }
                             );  
             #endregion
-            #region UpdateSchedule  //public for naw
+            #region DbUpdate/UpdateSchedule  //public for naw
             config.Routes.MapHttpRoute(
                        name: "UpdateSchedule",
                        routeTemplate: "api/DbUpdate/{action}",

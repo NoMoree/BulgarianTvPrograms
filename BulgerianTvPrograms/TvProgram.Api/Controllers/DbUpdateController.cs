@@ -173,27 +173,6 @@ namespace TvProgram.Api.Controllers
 
 
 
-        [HttpGet]
-        [ActionName("GetPrograms")]
-        public IQueryable<TvProgramModel> GetAll()
-        {
-            return this.PerformOperationAndHandleExceptions(() =>
-            {
-                var context = new ProgramTvContext();
-                var tvPrograms = context.TvPrograms;
-
-                var model =
-                    (from tv in tvPrograms
-                     select new TvProgramModel()//tv.ProgramId, tv.Name)
-                     {
-                         Name = tv.Name,
-                         ProgramId = tv.ProgramId,
-
-                     });
-                return model.OrderBy(t => t.Name);
-            });
-
-            //return responseMsg;
-        }
+       
     }
 }
