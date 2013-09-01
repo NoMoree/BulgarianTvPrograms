@@ -172,6 +172,7 @@
     <Compile Include="Models\CheckHelperModel.cs" />
     <Compile Include="Models\DataHelperModel.cs" />
     <Compile Include="Models\DayModel.cs" />
+    <Compile Include="Models\InitProgramModel\InitNameOfTVsModel.cs" />
     <Compile Include="Models\InitProgramModel\InitProgramScheduleModel.cs" />
     <Compile Include="Models\InitProgramModel\InitShowModel.cs" />
     <Compile Include="Models\InitProgramModel\InitTvProgramModel.cs" />

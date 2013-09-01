@@ -6,7 +6,7 @@ using System.Web;
 
 namespace TvProgram.Api.Models
 {
-    [DataContract]
+    [DataContract(Name="day")]
     public class DayModel
     {
         [DataMember(Name = "id")]
@@ -15,7 +15,7 @@ namespace TvProgram.Api.Models
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "getDate")]
+        [DataMember(Name = "date")]
         public DateTime Date { get; set; }
 
         public string GetDateSiteFromat()

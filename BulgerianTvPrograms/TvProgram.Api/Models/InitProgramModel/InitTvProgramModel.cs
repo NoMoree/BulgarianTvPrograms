@@ -13,13 +13,13 @@ namespace TvProgram.Api.Models.InitProgramModel
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
+        //[DataMember(Name = "name")]
+        //public string Name { get; set; }
 
-        [DataMember(Name = "lastUpdate")]
-        public DateTime LastUpdate { get; set; }
+        //[DataMember(Name = "lastUpdate")]
+        //public DateTime LastUpdate { get; set; }
 
-        [DataMember(Name = "schedule")]
+        [DataMember(Name = "schedules")]
         public IEnumerable<InitProgramScheduleModel> Schedule { get; set; }
     }
 }

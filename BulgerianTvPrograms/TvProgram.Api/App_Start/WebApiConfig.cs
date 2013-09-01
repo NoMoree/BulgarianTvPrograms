@@ -33,6 +33,18 @@ namespace TvProgram.Api
                    ); 
             #endregion
 
+            #region Data/InitNameOfTVsModel RDY
+            config.Routes.MapHttpRoute(
+                       name: "InitNameOfTVsModel",
+                       routeTemplate: "api/Data/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "InitNameOfTVsModel"
+                       }
+                   ); 
+            #endregion
+
             #region Data/AllProgramSchedule         FOR DEL         to big operation for initialise
             config.Routes.MapHttpRoute(
                        name: "AllProgramSchedule",

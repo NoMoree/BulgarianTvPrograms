@@ -107,7 +107,30 @@ namespace TvProgram.Api.Controllers
 
 
 #region Init :       DAYS   PROGRAMS
-		
+        [HttpGet]
+        public IQueryable<InitNameOfTVsModel> InitNameOfTVsModel()
+        {
+            var responseMsg = PerformOperationAndHandleExceptions(() =>
+            {
+                var context = new ProgramTvContext();
+                var tvPrograms = context.TvPrograms;
+
+                var model =
+                    (from tv in tvPrograms
+                     select new InitNameOfTVsModel()
+                     {
+                         Id = tv.Id,
+                         Name = tv.Name,
+                         LastUpdate = DateTime.Now
+                     });
+
+                return model;//.OrderBy(t => t.Name);
+
+            });
+            return responseMsg;
+        }
+
+
         [HttpGet]
         public IQueryable<InitTvProgramModel> InitPrograms()
         {
@@ -125,8 +148,6 @@ namespace TvProgram.Api.Controllers
                      select new InitTvProgramModel()
                      {
                          Id = tv.Id,
-                         Name = tv.Name,
-                         LastUpdate = DateTime.Now,
                          Schedule = (from day in tv.Days
                                      where day.Day.Date < today
                                      where day.Day.Date > yesterday
