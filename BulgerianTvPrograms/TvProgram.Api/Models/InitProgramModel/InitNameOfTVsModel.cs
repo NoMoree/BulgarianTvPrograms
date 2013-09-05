@@ -12,10 +12,13 @@ namespace TvProgram.Api.Models.InitProgramModel
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "programName")]
         public string Name { get; set; }
 
-        [DataMember(Name = "lastUpdate")]
-        public DateTime LastUpdate { get; set; }
+        [DataMember(Name = "logo")]
+        public string Logo { get; set; }
+
+        //[DataMember(Name = "lastUpdatedId")]
+        //public int LastUpdatedId { get; set; }
     }
 }

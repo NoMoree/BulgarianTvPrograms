@@ -162,7 +162,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\DbUpdateController.cs" />
+    <Compile Include="Controllers\DbController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -179,6 +179,7 @@
     <Compile Include="Models\ProgramScheduleModel.cs" />
     <Compile Include="Models\ShowModel.cs" />
     <Compile Include="Models\TvProgramModel.cs" />
+    <Compile Include="Models\UpdateProgramModel\MultUpdateScheduleModel.cs" />
     <Compile Include="Models\UpdateProgramModel\UpdateScheduleModel.cs" />
     <Compile Include="Models\UpdateProgramModel\UpdateShowModel.cs" />
     <Compile Include="Models\UpdateScheduleHelper.cs" />

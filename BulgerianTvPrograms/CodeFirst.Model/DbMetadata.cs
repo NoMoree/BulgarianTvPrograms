@@ -12,9 +12,9 @@ namespace CodeFirst.Model
         [Key]
         public int Id { get; set; }
 
-        public DateTime LastUpdate { get; set; }
+        public int LastUpdate { get; set; }
 
-        public DateTime OnProgramIdChange { get; set; }
+        public int OnProgramIdChange { get; set; }
 
     }
 }

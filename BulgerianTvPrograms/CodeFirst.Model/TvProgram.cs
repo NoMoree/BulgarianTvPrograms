@@ -10,7 +10,7 @@ namespace CodeFirst.Model
 
         public string Name { get; set; }
         public int ProgramId { get; set; }
-        public virtual Day LastUpdatedDate { get; set; }
+        public int LastUpdatedDate { get; set; }
 
         public virtual ICollection<ProgramSchedule> Days { get; set; }
 

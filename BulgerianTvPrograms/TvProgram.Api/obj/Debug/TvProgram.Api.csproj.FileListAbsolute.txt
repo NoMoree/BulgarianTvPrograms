@@ -1,6 +1,8 @@
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\TvProgram.Api.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\TvProgram.Api.pdb
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\Antlr3.Runtime.dll
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.dll
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\EntityFramework.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\Microsoft.Data.Edm.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\Microsoft.Data.OData.dll
@@ -22,6 +24,8 @@ C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\System.Web.WebPages.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\System.Web.WebPages.Razor.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\WebGrease.dll
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.pdb
+C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.pdb
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\EntityFramework.xml
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\Newtonsoft.Json.xml
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\System.Net.Http.Formatting.xml
@@ -68,7 +72,3 @@ C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.csprojResolveAssemblyReference.cache
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\obj\Debug\TvProgram.Api.pdb
-C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.dll
-C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.dll
-C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.DataLayer.pdb
-C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\TvProgram.Api\bin\CodeFirst.Model.pdb

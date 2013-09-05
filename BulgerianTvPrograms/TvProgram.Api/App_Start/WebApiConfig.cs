@@ -56,6 +56,17 @@ namespace TvProgram.Api
                        }
                    ); 
             #endregion
+            #region Data/PostTvProgramUpdate RDY
+            config.Routes.MapHttpRoute(
+                       name: "PostTvProgramUpdate",
+                       routeTemplate: "api/Data/{action}",
+                       defaults: new
+                       {
+                           controller = "Data",
+                           action = "PostTvProgramUpdate"
+                       }
+                   ); 
+            #endregion
 
             #region Data/UpdateProgramSchedule
             config.Routes.MapHttpRoute(
@@ -71,82 +82,101 @@ namespace TvProgram.Api
             #endregion
 
             //stoped
-            #region DbUpdate           Not Ment to be public
+            #region Db           Not Ment to be public
 
             ///*
-            //http://localhost:52807/api/DbUpdate/UpdateDay
-            //http://localhost:52807/api/DbUpdate/UpdateTvProg
-            //http://localhost:52807/api/DbUpdate/InitSchedule
+            //http://localhost:52807/api/Db/UpdateDay
+            //http://localhost:52807/api/Db/UpdateTvProg
+            //http://localhost:52807/api/Db/InitSchedule
             // * 
-            //http://localhost:52807/api/DbUpdate/UpdateSchedule
-            //http://localhost:52807/api/DbUpdate/
-            //http://localhost:52807/api/DbUpdate/
+            //http://localhost:52807/api/Db/UpdateSchedule
+            //http://localhost:52807/api/Db/
+            //http://localhost:52807/api/Db/
              
             //*/
-            //#region DbUpdate/DbUpdate    //public for naw
+            //#region Db/drop    //public for now
             //config.Routes.MapHttpRoute(
             //                    name: "Drop",      
-            //                    routeTemplate: "api/DbUpdate/{action}",
+            //                    routeTemplate: "api/Db/{action}",
             //                    defaults: new
             //                    {
-            //                        controller = "DbUpdate",
+            //                        controller = "Db",
             //                        action = "Drop"
             //                    }
             //                ); 
             //#endregion
 
-            //#region DbUpdate/InitOrUpdate    //public for naw
+            //#region Db/InitOrUpdate    //public for now
             //config.Routes.MapHttpRoute(
             //                    name: "InitOrUpdate",      
-            //                    routeTemplate: "api/DbUpdate/{action}",
+            //                    routeTemplate: "api/Db/{action}",
             //                    defaults: new
             //                    {
-            //                        controller = "DbUpdate",
+            //                        controller = "Db",
             //                        action = "InitOrUpdate"
             //                    }
             //                ); 
             //#endregion
 
-            //#region DbUpdate/UpdateDay   //public for naw
+            #region Db/Update   //request Update on User start
+            config.Routes.MapHttpRoute(
+                                name: "InitOrUpdateTodayPublic",
+                                routeTemplate: "api/Db/{action}",
+                                defaults: new
+                                {
+                                    controller = "Db",
+                                    action = "Update"
+                                }
+                            );
+            #endregion
+
+            #region Db/        must be Private
+
+            //#region Db/UpdateDay   //public for now
             //config.Routes.MapHttpRoute(
             //                    name: "UpdateDays",
-            //                    routeTemplate: "api/DbUpdate/{action}",
+            //                    routeTemplate: "api/Db/{action}",
             //                    defaults: new
             //                    {
-            //                        controller = "DbUpdate",
+            //                        controller = "Db",
             //                        action = "UpdateDay"
             //                    }
-            //                ); 
+            //                );
             //#endregion
-            //#region DbUpdate/UpdateTvProg    //public for naw
+
+            //#region Db/UpdateTvProg    //public for now
             //config.Routes.MapHttpRoute(
             //            name: "UpdatePrograms(20)",
-            //            routeTemplate: "api/DbUpdate/{action}",
+            //            routeTemplate: "api/Db/{action}",
             //            defaults: new
             //            {
-            //                controller = "DbUpdate",
+            //                controller = "Db",
             //                action = "UpdateTvProg"
             //            }
-            //        ); 
+            //        );
             //#endregion
-            //#region DbUpdate/InitSchedule    //public for naw
+
+            //#region Db/InitSchedule    //public for now
             //config.Routes.MapHttpRoute(
             //                    name: "InitSchedule",
-            //                    routeTemplate: "api/DbUpdate/{action}",
+            //                    routeTemplate: "api/Db/{action}",
             //                    defaults: new
             //                    {
-            //                        controller = "DbUpdate",
+            //                        controller = "Db",
             //                        action = "InitSchedule"
             //                    }
-            //                );  
+            //                );
             //#endregion
-            //#region DbUpdate/UpdateSchedule  //public for naw
+            
+            #endregion
+            
+            //#region Db/UpdateSchedule  //public for now
             //config.Routes.MapHttpRoute(
             //           name: "UpdateSchedule",
-            //           routeTemplate: "api/DbUpdate/{action}",
+            //           routeTemplate: "api/Db/{action}",
             //           defaults: new
             //           {
-            //               controller = "DbUpdate",
+            //               controller = "Db",
             //               action = "UpdateSchedule"
             //           }
             //       ); 
@@ -154,11 +184,6 @@ namespace TvProgram.Api
 
             
             #endregion
-
-
-
-
-
 
 
             #region DefaultApi + useless info

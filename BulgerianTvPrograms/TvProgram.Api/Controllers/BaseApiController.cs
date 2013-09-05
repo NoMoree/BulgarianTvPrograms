@@ -32,7 +32,14 @@ namespace TvProgram.Api.Controllers
 
             using (context)
             {
-                var dbMeta = context.DbMetadata.First();
+                var dbMeta = context.DbMetadata.FirstOrDefault();
+
+                var yesterday = DateTime.Now.AddDays(-1);
+
+
+                var dayToday = (from day in context.Day
+                                where (day.Date > yesterday)
+                                select day.Id).FirstOrDefault();
 
                 if (dbMeta == null)
                 {
@@ -40,12 +47,10 @@ namespace TvProgram.Api.Controllers
                     InitOrUpdateTvPrograms();
                     InitSchedulePrivate();
 
-
-
                     var newDbMeta = new CodeFirst.Model.DbMetadata()
                     {
-                        LastUpdate = DateTime.Now,
-                        OnProgramIdChange=DateTime.Now
+                        LastUpdate = dayToday,//DateTime.Now,
+                        OnProgramIdChange = dayToday//DateTime.Now
                     };
 
                     context.DbMetadata.Add(newDbMeta);
@@ -60,13 +65,13 @@ namespace TvProgram.Api.Controllers
                 //#endregion
 
                 #region Else Update DB data If not it was not UPDATED TODAY
-                else if (dbMeta.LastUpdate.DayOfYear != DateTime.Now.DayOfYear)
+                else if (dbMeta.LastUpdate != dayToday)//.DayOfYear != DateTime.Now.DayOfYear)
                 {
                     InitOrUpdateDays();
                     InitOrUpdateTvPrograms();
                     UpdateSchedulePrivate();
 
-                    dbMeta.LastUpdate = DateTime.Now;
+                    dbMeta.LastUpdate = dayToday;
                     context.SaveChanges();
                 }
                 #endregion
@@ -135,7 +140,6 @@ namespace TvProgram.Api.Controllers
                             }
                         }
 
-
                         var response =
                             this.Request.CreateResponse(HttpStatusCode.OK);
 
@@ -160,11 +164,6 @@ namespace TvProgram.Api.Controllers
 
                         }
                         var days = GetListOfDays(main);
-                        //List<TvProgramModel> programs = new List<TvProgramModel>();
-                        //for (int i = 0; i < 20; i++)
-                        //{
-                        //    programs.Add(allPrograms[i]);
-                        //}
 
                         var models =
                             (from day in dayContext
@@ -207,6 +206,10 @@ namespace TvProgram.Api.Controllers
             return responseMsg;
         }
 
+        /// <summary>
+        /// ///////////////////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
         protected HttpResponseMessage InitSchedulePrivate()
         {
             var responseMsg = this.PerformOperationAndHandleExceptions(
@@ -231,9 +234,9 @@ namespace TvProgram.Api.Controllers
 
                         int programsCount = context.TvPrograms.Count();
                         var allDaysCount = allDays.Count();
-                        for (int i = 1; i < programsCount + 1; i++)
+                        for (int i = 1; i < programsCount + 1; i++)//programsCount; i++)
                         {
-                            for (int thisDay = 1; thisDay < allDaysCount + 1; thisDay++)
+                            for (int thisDay = 1; thisDay < allDaysCount+1; thisDay++)
                             {
 
                                 var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == i);
@@ -253,23 +256,22 @@ namespace TvProgram.Api.Controllers
                                 {
                                     Day = days.FirstOrDefault(day => day.Id == thisDay)
                                 };
-                                thisProgram.Days.Add(newSchedule);
-                                context.SaveChanges();
-
-
+                                
+                                                                
                                 foreach (var show in newShows)
                                 {
-                                    var showForAdding = new CodeFirst.Model.Show()
+                                    newSchedule.Shows.Add(new CodeFirst.Model.Show()
                                     {
                                         Name = show.Name,
-                                        StarAt = show.StartAt,
-                                        TvProgram = thisProgram,
-                                        Day = newSchedule
-                                    };
-                                    newSchedule.Shows.Add(showForAdding);
-                                    context.SaveChanges();
+                                        StarAt = show.StartAt
+                                        //,
+                                        //TvProgram = thisProgram,
+                                        //Day = newSchedule
+                                    });
                                 }
-                                thisProgram.LastUpdatedDate = newSchedule.Day;
+                                thisProgram.Days.Add(newSchedule);
+                                thisProgram.LastUpdatedDate = thisDay;// newSchedule.Day;
+                                context.SaveChanges();
 
                             }
                         }
@@ -403,7 +405,7 @@ namespace TvProgram.Api.Controllers
                         var programsLastUpdatedDateId = (from tv in tvPrograms
                                                          orderby tv.Id
                                                          //where tv.LastUpdatedDate !=null
-                                                         select tv.LastUpdatedDate.Id
+                                                         select tv.LastUpdatedDate
                                                          ).ToList();
 
 
@@ -448,23 +450,25 @@ namespace TvProgram.Api.Controllers
                                     {
                                         Day = days.FirstOrDefault(usr => usr.Id == thisDay)
                                     };
-                                    thisProgram.Days.Add(newSchedule);
-                                    context.SaveChanges();
+                                    
 
 
                                     foreach (var show in newShows)
                                     {
-                                        var showForAdding = new CodeFirst.Model.Show()
+                                        newSchedule.Shows.Add(new CodeFirst.Model.Show()
                                         {
                                             Name = show.Name,
-                                            StarAt = show.StartAt,
-                                            TvProgram = thisProgram,
-                                            Day = newSchedule
-                                        };
-                                        thisProgram.LastUpdatedDate = newSchedule.Day;
-                                        newSchedule.Shows.Add(showForAdding);
-                                        context.SaveChanges();
+                                            StarAt = show.StartAt
+                                            //,
+                                            //TvProgram = thisProgram,
+                                            //Day = newSchedule
+                                        });
+                                        
                                     }
+                                    thisProgram.Days.Add(newSchedule);
+                                    thisProgram.LastUpdatedDate = thisDay;
+                                    
+                                    context.SaveChanges();
                                 }
                             }
                         }
@@ -613,18 +617,7 @@ namespace TvProgram.Api.Controllers
             var endIndexOfSelectTVs = contentString
                 .IndexOf("<div class=\"c\"></div>", startIndexOfSelectTv) - 28;
 
-            //var stringOfAllPrograms = contentString.Substring(
-            //    startIndexOfSelectTv,
-            //    endIndexOfSelectTVs - startIndexOfSelectTv)
-            //    .Replace('\n', ' ')
-            //    .Split(new string[] 
-            //            { 
-            //                "</div> \t </div> <div class=\"b5 tv_line\">  \t<div class=\"info\">"
-            //            },
-            //            StringSplitOptions.RemoveEmptyEntries
-            //        );
-
-            if (endIndexOfSelectTVs <0)
+            if (endIndexOfSelectTVs < 0)
             {
                 return null;
             }
@@ -659,7 +652,7 @@ namespace TvProgram.Api.Controllers
 
         protected static List<DayModel> GetListOfDays(string contentString)//, string mediaType = "application/json")
         {
-            #region old
+            #region old - not used
             //var startIndexOfSelectTv = contentString.IndexOf("<select name=\"date\" style=\"font-size:11px\">");// +45;
             //startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;// +45;
 
@@ -684,17 +677,25 @@ namespace TvProgram.Api.Controllers
             //} 
             #endregion
             var startIndexOfSelectTv = contentString.IndexOf("<select name=\"date\" style=\"font-size:11px\">");// +45;
-            startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;// +45;
+            startIndexOfSelectTv = contentString.IndexOf("<option value=\"", startIndexOfSelectTv) + 15;
 
 
             var endIndexOfSelectTVs = contentString.IndexOf("</select>", startIndexOfSelectTv) - 3;
 
-            var stringOfAllPrograms = contentString.Substring(startIndexOfSelectTv,
-                                                                endIndexOfSelectTVs - startIndexOfSelectTv)/*.Replace("\\n", "")*/.Replace(" selected", "").Replace("</option>", "").Split(new string[] { "<option value=\"" }, StringSplitOptions.RemoveEmptyEntries);
+            var stringOfAllPrograms = contentString.Substring(
+                startIndexOfSelectTv,
+                endIndexOfSelectTVs - startIndexOfSelectTv)/*.Replace("\\n", "")*/
+                .Replace(" selected", "")
+                .Replace("</option>", "")
+                .Split(new string[] { "<option value=\"" }, StringSplitOptions.RemoveEmptyEntries);
 
 
             var dates = new List<DayModel>();
-            
+            //dates.Add(new DayModel()
+            //{
+            //    Name = "DB-LastDayInitiol",
+            //    Date = DateTime.Now
+            //});
 
 
             string[] tempProg = new string[2];
@@ -716,16 +717,23 @@ namespace TvProgram.Api.Controllers
             var startIndexOfSelectTv = contentString.IndexOf("Всички</option>") + 17;
             var endIndexOfSelectTVs = contentString.IndexOf("</select>", startIndexOfSelectTv) - 3;
 
-            var stringOfAllPrograms = contentString.Substring(startIndexOfSelectTv,
-                                                                endIndexOfSelectTVs - startIndexOfSelectTv).Replace("\\n", "").Split(new string[] { "<option value=\"" }, StringSplitOptions.RemoveEmptyEntries);
+            var stringOfAllPrograms = contentString.Substring(startIndexOfSelectTv, endIndexOfSelectTVs - startIndexOfSelectTv)
+                .Replace("\\n", "")
+                .Split(new string[] { "<option value=\"" }, StringSplitOptions.RemoveEmptyEntries);
 
 
             var programs = new List<TvProgramModel>();
+            //programs.Add(new TvProgramModel()
+            //       {
+            //           ProgramId = 0,
+            //           Name = "nullProgramName"
+            //       });
 
             string[] tempProg = new string[2];
             foreach (var program in stringOfAllPrograms)
             {
                 tempProg = program.Split(new string[] { "\">" }, StringSplitOptions.None);
+
                 programs.Add(new TvProgramModel()
                     {
                         ProgramId = int.Parse(tempProg[0]),

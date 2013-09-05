@@ -11,7 +11,7 @@ using TvProgram.Api.Models;
 
 namespace TvProgram.Api.Controllers
 {
-    public class DbUpdateController : BaseApiController
+    public class DbController : BaseApiController
     {
         #region Not Ment to be public
         //[HttpGet]
@@ -45,26 +45,47 @@ namespace TvProgram.Api.Controllers
         //        });
         //    return responseMsg;
         //}
-        //[HttpGet]
-        //public HttpResponseMessage UpdateTvProg()
-        //{
-        //    return InitOrUpdateTvPrograms();
-        //}
-        //[HttpGet]
-        //public HttpResponseMessage UpdateDay()
-        //{
-        //    return InitOrUpdateDays();
-        //}
-        //[HttpGet]
-        //public HttpResponseMessage UpdateSchedule()
-        //{
-        //    return UpdateSchedulePrivate();
-        //}
-        //[HttpGet]
-        //public HttpResponseMessage InitSchedule()
-        //{
-        //    return InitSchedulePrivate();
-        //} 
+
+        #region UpdateDb used
+        [HttpGet]
+        public HttpResponseMessage Update()
+        {
+            var responseMsg = this.PerformOperationAndHandleExceptions(
+               () =>
+               {
+                   InitOrUpdateToday();
+
+                   var response =
+                           this.Request.CreateResponse(HttpStatusCode.OK);
+
+                   return response;
+               });
+            return responseMsg;
+        } 
+        #endregion
+        
+        [HttpGet]
+        public HttpResponseMessage UpdateSchedule()
+        {
+            return UpdateSchedulePrivate();
+        }
+
+        [HttpGet]
+        public HttpResponseMessage UpdateTvProg()
+        {
+            return InitOrUpdateTvPrograms();
+        }
+        [HttpGet]
+        public HttpResponseMessage UpdateDay()
+        {
+            return InitOrUpdateDays();
+        }
+
+        [HttpGet]
+        public HttpResponseMessage InitSchedule()
+        {
+            return InitSchedulePrivate();
+        } 
         #endregion
 
 
