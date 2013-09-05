@@ -68,7 +68,7 @@ namespace TvProgram.Api.Controllers
                 else if (dbMeta.LastUpdate != dayToday)//.DayOfYear != DateTime.Now.DayOfYear)
                 {
                     InitOrUpdateDays();
-                    InitOrUpdateTvPrograms();
+                    //InitOrUpdateTvPrograms();
                     UpdateSchedulePrivate();
 
                     dbMeta.LastUpdate = dayToday;
@@ -236,7 +236,7 @@ namespace TvProgram.Api.Controllers
                         var allDaysCount = allDays.Count();
                         for (int i = 1; i < programsCount + 1; i++)//programsCount; i++)
                         {
-                            for (int thisDay = 1; thisDay < allDaysCount+1; thisDay++)
+                            for (int thisDay = 1; thisDay < allDaysCount + 1; thisDay++)
                             {
 
                                 var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == i);
@@ -256,8 +256,8 @@ namespace TvProgram.Api.Controllers
                                 {
                                     Day = days.FirstOrDefault(day => day.Id == thisDay)
                                 };
-                                
-                                                                
+
+
                                 foreach (var show in newShows)
                                 {
                                     newSchedule.Shows.Add(new CodeFirst.Model.Show()
@@ -402,42 +402,49 @@ namespace TvProgram.Api.Controllers
 
                         //});
                         #endregion
-                        var programsLastUpdatedDateId = (from tv in tvPrograms
-                                                         orderby tv.Id
-                                                         //where tv.LastUpdatedDate !=null
-                                                         select tv.LastUpdatedDate
-                                                         ).ToList();
-
-
-                        //int n = 10;
+                        var tvs = (from tv in tvPrograms
+                                   orderby tv.Id
+                                   //where tv.LastUpdatedDate !=null
+                                   select new
+                                   {
+                                       Id = tv.Id,
+                                       lastUpdatedDate = tv.LastUpdatedDate
+                                   }).ToList();
+                        //tvs.Insert(0, new { Id = 0, lastUpdatedDate = 0 });
 
                         int lastDayId = days.Count();
 
-                        var nLastDaysId =
-                           (from day in days
-                            orderby day.Id
-                            //where day.Id > (days.Last().Id - n)
-                            where day.Id > (lastDayId - 3)
-                            select new DayModel()
-                            {
-                                Id = day.Id,
-                                Name = day.Name,
-                                Date = day.Date
-                            }
-                                            ).ToList();
+                        var nDays = (from day in days
+                                     orderby day.Id
+                                     //where day.Id > (days.Last().Id - n)
+                                     where day.Id > (lastDayId - 3)
+                                     select new DayModel()
+                                     {
+                                         Id = day.Id,
+                                         Date = day.Date
+                                     }).ToList();
+                        //nDays.Insert(0, new DayModel()
+                        //{
+                        //    Id = 0,
+                        //    Date = DateTime.Now
+                        //});
 
-                        //select tv.LastUpdatedDate.Id).ToList();
-                        int programsCount = programsLastUpdatedDateId.Count;
-                        for (int i = 1; i < programsCount + 1; i++)
+
+                        foreach (var tv in tvs)//.Skip(1))
                         {
-                            if (programsLastUpdatedDateId[i - 1] < lastDayId)
+                            //5 6 7
+                            //5   7
+
+                            //     10  9       8 9 10    10-9 =1  3-1        10 8   10-8=2  3-2
+                            //    7-5 = 2
+                            if (tv.lastUpdatedDate < nDays.Last().Id)
                             {
-                                for (int thisDay = programsLastUpdatedDateId[i - 1]; thisDay < lastDayId; thisDay++)
+                                foreach (var day in nDays.Skip(3 -  (nDays.Last().Id - tv.lastUpdatedDate)))//(1))
                                 {
-                                    var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == i);
+                                    var thisProgram = tvPrograms.FirstOrDefault(t => t.Id == tv.Id);
 
                                     string schedulePage = GetShowsHtml(thisProgram.ProgramId,
-                                        nLastDaysId[lastDayId - thisDay].GetDateSiteFromat());
+                                        day.GetDateSiteFromat());
 
                                     var newShows = GetListOfShows(schedulePage);
 
@@ -448,10 +455,8 @@ namespace TvProgram.Api.Controllers
 
                                     var newSchedule = new CodeFirst.Model.ProgramSchedule()
                                     {
-                                        Day = days.FirstOrDefault(usr => usr.Id == thisDay)
+                                        Day = days.FirstOrDefault(usr => usr.Id == day.Id)
                                     };
-                                    
-
 
                                     foreach (var show in newShows)
                                     {
@@ -459,19 +464,68 @@ namespace TvProgram.Api.Controllers
                                         {
                                             Name = show.Name,
                                             StarAt = show.StartAt
-                                            //,
-                                            //TvProgram = thisProgram,
-                                            //Day = newSchedule
                                         });
-                                        
+
                                     }
                                     thisProgram.Days.Add(newSchedule);
-                                    thisProgram.LastUpdatedDate = thisDay;
-                                    
+                                    thisProgram.LastUpdatedDate = day.Id;
+
                                     context.SaveChanges();
                                 }
+
+
+
+
                             }
                         }
+
+
+                        //select tv.LastUpdatedDate.Id).ToList();
+                        //int programsCount = tvs.Count;
+                        //for (int programToCheck = 1; programToCheck < programsCount; programToCheck++)
+                        //{
+                        //    if (tvs[programToCheck] < lastDayId)
+                        //    {
+                        //        for (int thisDay = tvs[programToCheck - 1]; thisDay < lastDayId; thisDay++)
+                        //        {
+                        //            var thisProgram = tvPrograms.FirstOrDefault(tv => tv.Id == programToCheck);
+
+                        //            string schedulePage = GetShowsHtml(thisProgram.ProgramId,
+                        //                nDays[lastDayId - thisDay].GetDateSiteFromat());
+
+                        //            var newShows = GetListOfShows(schedulePage);
+
+                        //            if (newShows == null)
+                        //            {
+                        //                break;
+                        //            }
+
+                        //            var newSchedule = new CodeFirst.Model.ProgramSchedule()
+                        //            {
+                        //                Day = days.FirstOrDefault(usr => usr.Id == thisDay)
+                        //            };
+
+
+
+                        //            foreach (var show in newShows)
+                        //            {
+                        //                newSchedule.Shows.Add(new CodeFirst.Model.Show()
+                        //                {
+                        //                    Name = show.Name,
+                        //                    StarAt = show.StartAt
+                        //                    //,
+                        //                    //TvProgram = thisProgram,
+                        //                    //Day = newSchedule
+                        //                });
+
+                        //            }
+                        //            thisProgram.Days.Add(newSchedule);
+                        //            thisProgram.LastUpdatedDate = thisDay;
+
+                        //            context.SaveChanges();
+                        //        }
+                        //    }
+                        //}
 
                         //foreach (var lastUpdate in programsLastUpdatedDateId)
                         //{
