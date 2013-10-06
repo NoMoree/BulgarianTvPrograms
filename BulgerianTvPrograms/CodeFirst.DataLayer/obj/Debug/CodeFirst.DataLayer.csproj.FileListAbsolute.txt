@@ -8,3 +8,13 @@ C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLaye
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.csprojResolveAssemblyReference.cache
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.dll
 C:\Temp\WinJS-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.pdb
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\CodeFirst.DataLayer.dll.config
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\CodeFirst.DataLayer.dll
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\CodeFirst.DataLayer.pdb
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\CodeFirst.Model.dll
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\EntityFramework.dll
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\CodeFirst.Model.pdb
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\bin\Debug\EntityFramework.xml
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.csprojResolveAssemblyReference.cache
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.dll
+C:\Temp\JSw-Project\BulgarianTvPrograms\BulgerianTvPrograms\CodeFirst.DataLayer\obj\Debug\CodeFirst.DataLayer.pdb

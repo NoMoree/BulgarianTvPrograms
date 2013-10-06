@@ -106,16 +106,16 @@ namespace TvProgram.Api
             //                ); 
             //#endregion
 
-            //#region Db/InitOrUpdate    //public for now
-            //config.Routes.MapHttpRoute(
-            //                    name: "InitOrUpdate",      
-            //                    routeTemplate: "api/Db/{action}",
+            //#region db/initorupdate    //public for now
+            //config.routes.maphttproute(
+            //                    name: "initorupdate",
+            //                    routetemplate: "api/db/{action}",
             //                    defaults: new
             //                    {
-            //                        controller = "Db",
-            //                        action = "InitOrUpdate"
+            //                        controller = "db",
+            //                        action = "initorupdate"
             //                    }
-            //                ); 
+            //                );
             //#endregion
 
             #region Db/Update   //request Update on User start
